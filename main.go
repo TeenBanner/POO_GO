@@ -7,3 +7,7 @@ func main() {
 }
 
 // metodos
+
+type xd struct {
+	Name string
+}
