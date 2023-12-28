@@ -2,17 +2,9 @@ package main
 
 import "fmt"
 
-type Course struct {
-	Name    string
-	Price   float64
-	IsFree  bool
-	UserIDs []uint
-	classes map[uint]string
-}
-
 func main() {
 	// instanciar structuras (creamos instancias de la estructura cursos)
-	Go := Course{
+	Go := Course{ // debemos de pasar un puntero a curso a la hora de llamar a sus metodos
 		Name:    "Go desde cero",
 		Price:   12.34,
 		IsFree:  false,
@@ -46,10 +38,9 @@ func main() {
 	js.Name = "curso javascript"
 	fmt.Println(css.IsFree)
 	fmt.Printf("%+v", css)
-}
 
-// metodos
-
-type xd struct {
-	Name string
+	Go.PrintClasses()
+	// apuntamos al objeto go para modificar el valor
+	(&Go).ChangePrice(67.12) // esto es automatico pero tenemos que tener en cuenta este proceso
+	fmt.Println(Go.Price)
 }
