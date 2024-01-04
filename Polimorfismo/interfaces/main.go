@@ -11,8 +11,18 @@ type Greeter interface {
 	Greet()
 }
 
+type byer interface {
+	Bye()
+}
+
 // las interfaces proporcionan una manera de espicificar el comportamiento esperado de un objeto sin detallar sono se logra ese comportamiento
 // cualquier metodo Greet estara satisfaciendo la interfaz Greeter
+// podemos hacer composiscion de interfaces
+
+type GreeterByer interface {
+	Greeter
+	byer
+}
 
 type Person struct {
 	Name string
@@ -22,10 +32,18 @@ func (p Person) Greet() {
 	fmt.Printf("Hola soy %s", p.Name)
 }
 
+func (p Person) Bye() {
+	fmt.Println("bye")
+}
+
 type Text string
 
 func (t Text) Greet() {
 	fmt.Printf("hola soy un %v", t)
+}
+
+func (t Text) Bye() {
+	fmt.Println("bye")
 }
 
 func GreetAll(gs ...Greeter) {
@@ -33,6 +51,24 @@ func GreetAll(gs ...Greeter) {
 		g.Greet()
 		fmt.Printf("\t Valor: %v, Tipo %T\n", g, g)
 	}
+}
+
+func ByeAll(bs ...byer) {
+	for _, b := range bs {
+		b.Bye()
+	}
+}
+
+func All(gbs ...GreeterByer) {
+	for _, gb := range gbs {
+		gb.Greet()
+		gb.Bye()
+	}
+}
+
+// implementar interfaces de paquetes
+func (p Person) String() string {
+	return "Hola soy una persona y mi nombre es: " + p.Name
 }
 
 func main() {
@@ -45,4 +81,6 @@ func main() {
 	p := Person{Name: "Felipe"}
 	var t Text = "daisy"
 	GreetAll(p, t)
+	ByeAll(t, p)
+	All(p, t)
 }
