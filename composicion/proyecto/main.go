@@ -22,9 +22,30 @@ type Item struct {
 	value   float64
 }
 
+// definicion de tipo Item
+type Items []Item
+
+// constructor de Items
+
+func NewItems(items ...Item) Items {
+	var is Items
+	for _, item := range items {
+		is = append(is, item)
+	}
+	return is
+}
+
 //value getter
 func (i Item) Value() float64 {
 	return i.value
+}
+
+func (is Items) Total() float64 {
+	var total float64
+	for _, item := range is {
+		total += item.value
+	}
+	return total
 }
 
 // new returns a new item
@@ -38,18 +59,16 @@ type Invoice struct {
 	city    string
 	total   float64
 	client  Customer
-	items   []Item // decimos que tenemos una relacion de uno a muchos (obtenemos un slice de tipo item)
+	items   Items // decimos que tenemos una relacion de uno a muchos (obtenemos un slice de tipo item)
 }
 
 // set total is a setter of invoice.Total
 func (i *Invoice) SetTotal() {
-	for _, item := range i.items {
-		i.total += item.Value()
-	}
+	i.total = i.items.Total()
 }
 
 // NewInvoic returns a new invoice
-func NewInvoice(country, city string, client Customer, items []Item) Invoice {
+func NewInvoice(country, city string, client Customer, items Items) Invoice {
 	return Invoice{
 		country: country,
 		city:    city,
@@ -62,9 +81,12 @@ func main() {
 	// make new Invoice
 	i := NewInvoice("Colombia", "popaya",
 		NewCustomer("alejandro", "cl 123", "+40 233 572 3024"),
-		[]Item{NewItem(1, "Curso de Go", 12.34),
+		NewItems(
+			NewItem(1, "Curso de Go", 12.34),
 			NewItem(2, "Curso POO GO", 54.23),
-			NewItem(3, "Curso de Testing con Go", 90.00)})
+			NewItem(3, "Curso de Testing con Go", 90.00),
+		),
+	)
 
 	// Calculate Total
 	i.SetTotal()
